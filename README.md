@@ -1,163 +1,217 @@
 # Vue Chrome Extension
 
-A Chrome extension built with Vue 3, TypeScript, and Tailwind CSS.
+A Chrome extension built with Vue 3, TypeScript, and Tailwind CSS that provides an AI chat assistant interface.
 
-## Features
+## Technologies
 
-- Popup UI with Vue 3 and Tailwind CSS
-- Options page for extension settings
-- Background script for event handling
-- Content script that injects into web pages
-- Chrome storage API integration
-- Message passing between components
+- **Frontend**: Vue 3, TypeScript, Tailwind CSS, Naive UI
+- **State Management**: Pinia
+- **Build Tools**: Vite, vue-tsc
+- **Testing**: Vitest (unit tests), Playwright (e2e tests)
+- **Chrome Extension**: Manifest V3
+- **Packaging**: Archiver
 
 ## Project Structure
 
-- `src/`: Source code
-  - `background.ts`: Background script
-  - `content.ts`: Content script
-  - `manifest.json`: Extension manifest
-  - `popup/`: Popup UI
-  - `options/`: Options page
-  - `icons/`: Extension icons
-  - `types/`: TypeScript type definitions
+```
+├── e2e/                    # End-to-end tests using Playwright
+├── public/                 # Public assets
+├── src/                    # Source code
+│   ├── background.ts       # Background service worker
+│   ├── content.ts          # Content script injected into web pages
+│   ├── manifest.json       # Chrome extension manifest
+│   ├── tailwind.css        # Tailwind CSS configuration
+│   ├── icons/              # Extension icons
+│   │   ├── icon16.svg      # 16x16 icon
+│   │   ├── icon48.svg      # 48x48 icon
+│   │   └── icon128.svg     # 128x128 icon
+│   ├── options/            # Options page
+│   │   ├── index.html      # Options page HTML
+│   │   ├── main.ts         # Options page entry point
+│   │   └── Options.vue     # Options page component
+│   ├── popup/              # Popup UI
+│   │   ├── index.html      # Popup HTML
+│   │   ├── main.ts         # Popup entry point
+│   │   └── App.vue         # Popup component
+│   └── types/              # TypeScript type definitions
+│       ├── chrome.d.ts     # Chrome API types
+│       ├── css.d.ts        # CSS module types
+│       └── vue.d.ts        # Vue types
+├── tests/                  # Unit tests
+│   └── unit/               # Unit tests using Vitest
+│       └── ChatPanel.spec.ts # Chat panel component test
+├── index.html              # Development entry point
+├── package.json            # Project dependencies and scripts
+├── playwright.config.ts    # Playwright configuration
+├── postcss.config.js       # PostCSS configuration
+├── tailwind.config.js      # Tailwind CSS configuration
+├── tsconfig.json           # TypeScript configuration
+├── vite.config.ts          # Vite configuration
+├── vitest.config.ts        # Vitest configuration
+└── zip-extension.js        # Script to package the extension
+```
 
-## Development
+## Features
+
+- **AI Chat Interface**: A popup UI that allows users to chat with an AI assistant
+- **Settings Management**: Options page for configuring API keys, model selection, and UI preferences
+- **Background Processing**: Background service worker that handles AI message processing
+- **Web Page Integration**: Content script that shows a notification when the extension is active
+- **Chrome Storage**: Persistent storage for settings and chat history
+- **Message Passing**: Communication between different parts of the extension
+
+## Development Setup
 
 ### Prerequisites
 
 - Node.js (v16+)
 - npm or yarn
 
-### Setup
-
-1. Clone the repository
-2. Install dependencies:
+### Installation
 
 ```bash
+# Clone the repository
+git clone <repository-url>
+
+# Navigate to the project directory
+cd vue-chrome-extension
+
+# Install dependencies
 npm install
 ```
 
 ### Development Commands
 
-- Run development server:
-
 ```bash
+# Start development server
 npm run dev
-```
 
-- Build the extension:
+# Run unit tests
+npm run test:unit
 
-```bash
+# Run unit tests in watch mode
+npm run test:unit:watch
+
+# Run end-to-end tests
+npm run test:e2e
+
+# Run all tests
+npm run test
+
+# Build the extension
 npm run build
-```
 
-- Package the extension into a zip file:
+# Create a zip file of the extension
+npm run zip
 
-```bash
+# Build and package the extension
 npm run package
 ```
 
-## Detailed Deployment Steps
+## Local Development
 
-### Local Development Deployment
+1. Start the development server:
 
-1. Build the extension:
-
-```bash
-npm run build
-```
+   ```bash
+   npm run dev
+   ```
 
 2. Open Chrome and navigate to `chrome://extensions/`
+
 3. Enable "Developer mode" (toggle in the top-right corner)
-4. Click "Load unpacked" and select the `dist` directory
+
+4. Click "Load unpacked" and select the `dist` directory (or `dev-dist` during development)
+
 5. The extension should now be loaded and visible in your browser
 
-### Chrome Web Store Deployment
+## Testing
 
-1. Package the extension:
+### Unit Tests
+
+Unit tests are written using Vitest and Vue Test Utils. They test individual components in isolation.
 
 ```bash
+# Run unit tests
+npm run test:unit
+
+# Run unit tests in watch mode
+npm run test:unit:watch
+```
+
+### End-to-End Tests
+
+End-to-end tests are written using Playwright. They test the application as a whole, simulating user interactions.
+
+```bash
+# Run end-to-end tests
+npm run test:e2e
+```
+
+## Extension Structure
+
+### Popup
+
+The popup is the main UI that appears when clicking the extension icon. It provides a chat interface where users can:
+
+- Send messages to the AI assistant
+- View responses
+- Configure settings (API key, model selection)
+
+### Options Page
+
+The options page provides additional configuration options:
+
+- Notification style
+- Toggle notifications on/off
+- Theme color selection
+
+### Background Script
+
+The background script runs in the background and:
+
+- Processes chat messages
+- Simulates AI responses (currently with placeholder responses)
+- Communicates with the popup and content script
+
+### Content Script
+
+The content script is injected into web pages and:
+
+- Shows a notification that the extension is active
+- Communicates with the background script
+
+## Building and Packaging
+
+```bash
+# Build the extension
+npm run build
+
+# Package the extension into a zip file
 npm run package
 ```
 
-2. Go to the [Chrome Developer Dashboard](https://chrome.google.com/webstore/devconsole/)
-3. Sign in with your Google account
-4. Click "New Item" and upload the `extension.zip` file
-5. Fill in the required information:
-   - Description
-   - Screenshots (at least one 1280x800 or 640x400)
-   - Promotional images (optional)
-   - Category selection
-   - Language
-6. Pay the one-time developer fee ($5 USD) if you haven't already
-7. Submit for review
-8. Wait for approval (typically 1-3 business days)
+The build process:
 
-### Enterprise Deployment
+1. Compiles TypeScript files
+2. Bundles the application with Vite
+3. Copies and updates the manifest.json
+4. Copies and renames icon files
 
-For enterprise deployment, you can distribute the extension through:
+The packaging process:
 
-1. Chrome Enterprise policies
-2. Host the extension on your own server and use the Chrome Enterprise policy to install it
-3. Use the Chrome Web Store private publishing option
+1. Builds the extension
+2. Creates a zip file of the dist directory
 
-## Usage Instructions
+## Chrome Extension APIs Used
 
-### For Users
+- **chrome.runtime**: For message passing between different parts of the extension
+- **chrome.storage**: For storing settings and chat history
+- **chrome.tabs**: For accessing the current tab information
 
-1. After installing the extension, you'll see the extension icon in your Chrome toolbar
-2. Click the icon to open the popup interface
-3. The popup shows the current URL and allows you to send test messages
-4. Click "Open Options" at the bottom of the popup to access the options page
-5. In the options page, you can:
-   - Change notification style
-   - Toggle notifications on/off
-   - Select a custom theme color
+## Future Enhancements
 
-### For Developers
-
-#### Modifying the Popup UI
-
-1. Edit files in `src/popup/` directory
-2. The main component is in `src/popup/App.vue`
-3. Styles are managed through Tailwind CSS classes
-
-#### Modifying the Options Page
-
-1. Edit files in `src/options/` directory
-2. The main component is in `src/options/Options.vue`
-3. Settings are stored using Chrome's storage API
-
-#### Modifying the Content Script
-
-1. Edit `src/content.ts` to change how the extension interacts with web pages
-2. The content script currently shows a notification when loaded on a page
-
-#### Modifying the Background Script
-
-1. Edit `src/background.ts` to change background behavior
-2. The background script handles events and messaging between components
-
-## Troubleshooting
-
-- If you encounter permission issues with build scripts, run:
-
-  ```bash
-  chmod +x node_modules/.bin/vue-tsc
-  ```
-
-- If Tailwind CSS isn't working, make sure you have the correct PostCSS configuration:
-
-  ```bash
-  npm install --save-dev @tailwindcss/postcss
-  ```
-
-- If Chrome doesn't recognize the extension, check that:
-  1. The manifest.json is correctly formatted
-  2. All paths in the manifest.json are correct
-  3. The dist directory contains all necessary files
-
-## License
-
-MIT
+- Implement actual OpenAI API integration
+- Add more AI models
+- Improve UI/UX
+- Add more customization options
+- Implement context-aware suggestions based on the current web page
