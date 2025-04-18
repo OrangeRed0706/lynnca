@@ -4,35 +4,34 @@ import * as path from 'path';
 import * as fs from 'fs';
 import { fileURLToPath } from 'url';
 
-// Get the directory name equivalent to __dirname in ESM
+// 获取当前目录
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-// Function to copy files during build
+// 复制文件的插件
 function copyFiles() {
   return {
     name: 'copy-files',
     closeBundle() {
-      // Copy and update manifest.json
+      // 复制并更新 manifest.json
       const manifestPath = path.resolve(__dirname, 'src/manifest.json');
       const manifestContent = fs.readFileSync(manifestPath, 'utf-8');
       const manifest = JSON.parse(manifestContent);
-      
-      // Update paths in manifest
+
+      // 更新 manifest 中的路径
       manifest.action.default_popup = 'src/popup/index.html';
       manifest.options_page = 'src/options/index.html';
-      
-      // Write updated manifest
+
+      // 写入更新后的 manifest
       const manifestDest = path.resolve(__dirname, 'dist/manifest.json');
       fs.writeFileSync(manifestDest, JSON.stringify(manifest, null, 4));
-      
-      // Create icons directory
+
+      // 创建 icons 目录
       const iconsDir = path.resolve(__dirname, 'dist/icons');
       if (!fs.existsSync(iconsDir)) {
         fs.mkdirSync(iconsDir);
       }
-      
-      // Copy SVG icons and convert file extension to PNG in the filename
-      // (We're not actually converting the format, just renaming for this example)
+
+      // 复制 SVG 图标并将文件扩展名更改为 PNG（仅重命名，未实际转换格式）
       const iconSizes = [16, 48, 128];
       iconSizes.forEach(size => {
         const srcPath = path.resolve(__dirname, `src/icons/icon${size}.svg`);
@@ -43,16 +42,11 @@ function copyFiles() {
   };
 }
 
-// https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [
-    vue(),
-    copyFiles(),
-  ],
-  server: {
-    fs: {
-      // Allow serving files from one level up to the project root
-      allow: ['..'],
+  plugins: [vue(), copyFiles()],
+  resolve: {
+    alias: {
+      '@': '/src',
     },
   },
   build: {
@@ -68,12 +62,13 @@ export default defineConfig({
         entryFileNames: '[name].js',
         chunkFileNames: '[name].js',
         assetFileNames: '[name].[ext]',
+        sanitizeFileName(name) {
+          return name
+            .replace(/^\0+/, '')        // 移除 \0 前綴
+            .replace(/[:*?"<>|]/g, '')  // 清掉非法字元
+            .replace(/^_+/, '');        // 清掉開頭底線
+        },
       },
-    },
-  },
-  resolve: {
-    alias: {
-      '@': '/src',
     },
   },
 });

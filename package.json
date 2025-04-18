@@ -15,30 +15,32 @@
         "test": "npm run test:unit && npm run test:e2e"
     },
     "dependencies": {
-        "autoprefixer": "^10.4.21",
+        "@mdi/font": "^7.4.47",
         "naive-ui": "^2.41.0",
+        "openai": "^4.95.1",
         "pinia": "^3.0.2",
-        "postcss": "^8.5.3",
-        "tailwindcss": "^4.1.4",
         "vue": "^3.5.13"
     },
     "devDependencies": {
         "@playwright/test": "^1.52.0",
-        "@tailwindcss/postcss": "^4.1.4",
         "@types/node": "^22.14.1",
         "@vitejs/plugin-vue": "^5.2.2",
         "@vue/test-utils": "^2.4.6",
         "@vue/tsconfig": "^0.7.0",
         "archiver": "^7.0.1",
+        "autoprefixer": "^10.4.21",
         "eslint": "^9.24.0",
         "eslint-config-prettier": "^10.1.2",
         "eslint-plugin-vue": "^10.0.0",
         "jsdom": "^26.1.0",
+        "postcss": "^8.5.3",
         "prettier": "^3.5.3",
         "typescript": "~5.7.2",
         "vite": "^6.3.1",
         "vite-plugin-chrome-extension": "^0.0.7",
+        "vite-plugin-vuetify": "^2.1.1",
         "vitest": "^3.1.1",
-        "vue-tsc": "^2.2.8"
+        "vue-tsc": "^2.2.8",
+        "vuetify": "^3.8.2"
     }
 }
