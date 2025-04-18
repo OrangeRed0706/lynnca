@@ -1,6 +1,37 @@
 // Type definitions for Chrome extension API
 // This is a simplified version for our project
 
+interface TabChangeInfo {
+  status?: string;
+  url?: string;
+  pinned?: boolean;
+  audible?: boolean;
+  discarded?: boolean;
+  autoDiscardable?: boolean;
+  mutedInfo?: any;
+  favIconUrl?: string;
+  title?: string;
+}
+
+interface Tab {
+  id?: number;
+  index: number;
+  pinned: boolean;
+  highlighted: boolean;
+  windowId: number;
+  active: boolean;
+  discarded: boolean;
+  autoDiscardable: boolean;
+  url?: string;
+  title?: string;
+  favIconUrl?: string;
+  status?: string;
+  incognito: boolean;
+  width?: number;
+  height?: number;
+  sessionId?: string;
+}
+
 interface Chrome {
   runtime: {
     onInstalled: {
@@ -29,6 +60,15 @@ interface Chrome {
       },
       callback: (tabs: Array<{ url?: string; id?: number }>) => void
     ) => void;
+    onUpdated: {
+      addListener: (
+        callback: (
+          tabId: number,
+          changeInfo: TabChangeInfo,
+          tab: Tab
+        ) => void
+      ) => void;
+    };
   };
   storage: {
     sync: {
